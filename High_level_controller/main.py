@@ -31,8 +31,10 @@ def main():
 
     try:
         while True:
-            pl.print_data()
-            time.sleep(1)
+            if pl.isNewPiece():
+                print(pl.getNewCoordinate())
+
+            time.sleep(0.1)
     except Exception as e:
         print(str(e))
 

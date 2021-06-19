@@ -8,8 +8,10 @@ class Piece_locator:
         self.__connection = serial.Serial(self.__port, self.__baud_rate, timeout=2)
         self.__connection.flush()
         self.__newPieceCoordinate = [0, 0]
+        self.__piece_flag = False
         self.__data_array = []        #for raw data
         self.__piece_array = []       #for processed data
+        
         # init the two arrays
         for i in range(0, 9):
             new = []
@@ -46,16 +48,18 @@ class Piece_locator:
         for y in range(len(self.__data_array)):
             for x in range(len(self.__data_array[y])):
                 ## can only change to zero, not vice versa
-                if self.__data_array[x][y] == 0:
+                if (self.__data_array[x][y] == 0) and (self.__piece_array[x][y] != 0):
                     self.__piece_array[x][y] = 0
                     self.__newPieceCoordinate[0] = x
                     self.__newPieceCoordinate[1] = y
+                    self.__piece_flag = True
 
     def resetCoordinate(self, x, y):
         self.__piece_array[x][y] = 1
     
     def getNewCoordinate(self):
-        self.__scan_board()
+        # self.__scan_board()
+        self.__piece_flag = False
         return self.__newPieceCoordinate
     
     def getPieceLayout(self):
@@ -65,5 +69,9 @@ class Piece_locator:
     def print_data(self):
         self.__scan_board()
         print(self.__piece_array)
+    
+    def isNewPiece(self):
+        self.__scan_board()
+        return self.__piece_flag
 
     
