@@ -33,14 +33,17 @@ def buttonPushed(channel):
 
 def main():
     format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    logging.basicConfig(format=format, level=logging.DEBUG, datefmt="%H:%M:%S")
     logging.info("[main]Program started")
+
+    # A separated selector initialization is required as it takes quite some time
+    xy.selector_init()
 
     e1 = Encoder(27, 22, 17, valueChanged, buttonPushed)
 
     try:
         # test xy control
-        xy.executeCmd(["home", ['x', 1], ['y', 5], ['s', 1, 5], "z0"])
+        xy.executeCmd(["z0", ['x', 9], ['i', 1], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
         while True:
             if pl.isNewPiece():
                 logging.info("[main]new piece: " + str(pl.getNewCoordinate()))

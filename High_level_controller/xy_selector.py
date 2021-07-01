@@ -13,14 +13,6 @@ class XY_selector:
         self.__cmd_sequence = [] # example: [[x,1], [y,6], [s,2,3],...]
         self.__busy_flag = False
         self.__lock = threading.Lock()
-
-        # init check
-        self.__check()
-        try:
-            self.__listen()
-        except Exception as e:
-            logging.info("[main]xy selector init error: " + str(e))
-            sys.exit("Exit due to error")
     
     def __xMoveTo(self, x_target):
         if x_target > 9:
@@ -35,6 +27,13 @@ class XY_selector:
         elif y_target < 1:
             y_target = 1
         self.__connection.write(f"y{y_target}".encode('utf-8'))
+    
+    def __MoveToIdle(self, target):
+        if target > 4:
+            target = 4
+        elif target < 1:
+            target = 1
+        self.__connection.write(f"i{target}".encode('utf-8'))
     
     def __zUp(self):
         self.__connection.write("z1".encode('utf-8'))
@@ -53,6 +52,13 @@ class XY_selector:
         elif rtn_pos < 1:
             rtn_pos = 1
         self.__connection.write(f"s{storage}.{rtn_pos}".encode('utf-8'))
+    
+    def __dispensePiece(self, storage):
+        if storage > 4:
+            storage = 4
+        elif storage < 1:
+            storage = 1
+        self.__connection.write(f"d{storage}".encode('utf-8'))
     
     def __home(self):
         self.__connection.write("home".encode('utf-8'))
@@ -89,6 +95,10 @@ class XY_selector:
                         self.__yMoveTo(item[1])
                     elif item[0] == 's':
                         self.__getPiece(item[1], item[2])
+                    elif item[0] == 'i':
+                        self.__MoveToIdle(item[1])
+                    elif item[0] == 'd':
+                        self.__dispensePiece(item[1])
                     else:
                         break
                 else:
@@ -105,7 +115,19 @@ class XY_selector:
                 logging.info("[thread]All cmds are sent")
             
             self.__busy_flag = False
-
+    
+    def selector_init(self):
+        # init check
+        try:
+            counter = 0
+            while self.__listen() != "DONE":
+                counter += 1
+                if counter >=2:
+                    raise Exception("init timeout")
+            logging.info("[main]xy_selector initialized.")
+        except Exception as e:
+            logging.info("[main]xy selector init error: " + str(e))
+            sys.exit("Exit due to error")
 
     def executeCmd(self, cmds):
         # example: [[x,1], [y,6], [s,2,3], "home"...]
