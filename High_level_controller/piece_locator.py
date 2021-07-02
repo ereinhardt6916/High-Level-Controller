@@ -1,4 +1,5 @@
 import serial
+import logging
 
 class Piece_locator:
 
@@ -11,6 +12,7 @@ class Piece_locator:
         self.__piece_flag = False
         self.__data_array = []        #for raw data
         self.__piece_array = []       #for processed data
+        logging.info("[main]piece_locator initialized.")
         
         # init the two arrays
         for i in range(0, 9):

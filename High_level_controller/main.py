@@ -1,49 +1,34 @@
-import I2C_LCD_driver
-import RPi.GPIO as GPIO
-from encoder import Encoder
-from piece_locator import Piece_locator
-from xy_selector import XY_selector
 import time
 import logging
+import random
+import RPi.GPIO as GPIO
+from config import lcd, xy, pl, encoder, socket, mycolour, gm
 
-# variables for LCD
-mylcd = I2C_LCD_driver.lcd()
-
-# variables for rotary encoder
-GPIO.setmode(GPIO.BCM)
-
-# variables for piece locator
-port_PL = "/dev/ttyACM0"
-pl = Piece_locator(port_PL)
-
-# variables for xy selector
-port_XY = "/dev/ttyACM1"
-xy = XY_selector(port_XY)
 
 def valueChanged(value):
     logging.info(f"New value: {value}")
-    mylcd.lcd_display_string(f"New value: {value}", 1)
+    lcd.lcd_display_string(f"New value: {value}", 1)
 
 def buttonPushed(channel):
     logging.info(f"button push: {channel}")
-    mylcd.lcd_display_string(f"button push: {channel}", 2)
+    lcd.lcd_display_string(f"button push: {channel}", 2)
     time.sleep(1)
-    mylcd.lcd_display_string(' '*16, 2)
+    lcd.lcd_display_string(' '*16, 2)
     
 
 def main():
-    format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.DEBUG, datefmt="%H:%M:%S")
-    logging.info("[main]Program started")
-
-    # A separated selector initialization is required as it takes quite some time
-    xy.selector_init()
-
-    e1 = Encoder(27, 22, 17, valueChanged, buttonPushed)
-
     try:
+        logging.info("[main]Program started")
+
+        # hardware init
+        xy.selector_init()
+        encoder.callbackAttach(valueChanged, buttonPushed)
+
+        # game manager init
+        gm.setup(socket, xy, pl, encoder, lcd)
+
         # test xy control
-        xy.executeCmd(["z0", ['x', 9], ['i', 1], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
+        # xy.executeCmd(["z0", ['x', 9], ['i', 1], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
         while True:
             if pl.isNewPiece():
                 logging.info("[main]new piece: " + str(pl.getNewCoordinate()))

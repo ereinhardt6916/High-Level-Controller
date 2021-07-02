@@ -179,3 +179,6 @@ class lcd:
       for char in fontdata:
          for line in char:
             self.lcd_write_char(line) 
+   
+   def lcd_clear_line(self, line):
+      self.lcd_display_string(" "*16, line)
