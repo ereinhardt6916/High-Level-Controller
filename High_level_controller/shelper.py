@@ -1,21 +1,25 @@
 import socket
+import logging
 
-sckt = None
-#conn = None
-#addr = None
+class Shelper:
+	def __init__(self, host, port):
+		self.__host = host
+		self.__port = port
 
-def send_data(sckt,content):
-	sckt.send(content)
+	def connect(self):
+		self.__sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+		self.__sckt.connect((self.__host, self.__port))
+		logging.info("[main]socket connected")
 
-def read_data(sckt):
-	buf = sckt.recv(1024)
-	return buf
+	def send_data(self, content):
+		self.__sckt.send(content)
 
-def close_socket(sckt):
-	sckt.close()
+	def read_data(self):
+		buf = self.__sckt.recv(1024)
+		return buf
 
-def socket_setup(host, port):
-	sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	sckt.connect((host, port))
-	return(sckt)
+	def close_socket(self):
+		self.__sckt.close()
+		logging.info("[main]socket closed")
+
 

@@ -1,4 +1,5 @@
 import serial
+import logging
 
 class Piece_locator:
 
@@ -11,6 +12,7 @@ class Piece_locator:
         self.__piece_flag = False
         self.__data_array = []        #for raw data
         self.__piece_array = []       #for processed data
+        logging.info("[main]piece_locator initialized.")
         
         # init the two arrays
         for i in range(0, 9):
@@ -55,12 +57,15 @@ class Piece_locator:
                     self.__piece_flag = True
 
     def resetCoordinate(self, x, y):
-        self.__piece_array[x][y] = 1
-    
+        self.__piece_array[x-1][y-1] = 1
+
+    def setCoordinate(self, x, y):
+        self.__piece_array[x-1][y-1] = 0
+
     def getNewCoordinate(self):
         # self.__scan_board()
         self.__piece_flag = False
-        return self.__newPieceCoordinate
+        return [self.__newPieceCoordinate[0]+1, self.__newPieceCoordinate[1]+1]
     
     def getPieceLayout(self):
         self.__scan_board()

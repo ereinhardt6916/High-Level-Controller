@@ -137,6 +137,9 @@ class XY_selector:
         execThrd = threading.Thread(target=self.__executeCmd, daemon=True)
         execThrd.start()
         logging.info("[main]xy exec thread started")
+    
+    def isBusy(self):
+        return self.__busy_flag
 
 
                 

@@ -1,9 +1,5 @@
 import time
-
-from shelper import socket_setup
-from shelper import close_socket
-from shelper import read_data
-from shelper import send_data
+from config import socket
 
 
 def send_piece(host, port, piece_added):
