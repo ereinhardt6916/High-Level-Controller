@@ -2,7 +2,7 @@ import time
 import logging
 import random
 import RPi.GPIO as GPIO
-from config import lcd, xy, pl, encoder, socket, mycolour, gm
+from config import lcd, xy, pl, encoder, socket, gm
 
 
 def valueChanged(value):
@@ -27,15 +27,20 @@ def main():
         # game manager init
         gm.setup(socket, xy, pl, encoder, lcd)
 
-        # test xy control
-        # xy.executeCmd(["z0", ['x', 9], ['i', 1], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
-        while True:
-            if pl.isNewPiece():
-                logging.info("[main]new piece: " + str(pl.getNewCoordinate()))
+        # start the game loop
+        # gm.startGame()
 
-            time.sleep(0.1)
+        # test xy control
+        # xy.executeCmd(["z0", ['x', 9], ['i', 4], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
+        # while True:
+        #     if pl.isNewPiece():
+        #         logging.info("[main]new piece: " + str(pl.getNewCoordinate()))
+
+        #     time.sleep(0.1)
     except Exception as e:
         logging.info(str(e))
+
+    gm.startGame()
 
     GPIO.cleanup()
 
