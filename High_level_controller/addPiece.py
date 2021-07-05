@@ -2,12 +2,12 @@ import math
 #black 1 white 2 in array
 #          1 2 3 4 5 6 7 8 9   
 row0 =  [3,3,3,3,3,3,3,3,3,3,3] #
-row1 =  [3,0,2,2,1,0,0,0,0,0,3] #9
-row2 =  [3,0,0,0,1,0,0,0,0,0,3] #18
-row3 =  [3,1,1,2,0,2,0,0,0,0,3] #27
-row4 =  [3,2,1,0,2,2,0,0,0,0,3] #36
-row5 =  [3,1,0,0,0,0,0,0,0,0,3] #45
-row6 =  [3,0,0,0,0,0,0,0,0,0,3] #54
+row1 =  [3,2,2,2,1,1,1,1,2,1,3] #9
+row2 =  [3,1,0,0,1,1,2,0,2,2,3] #18
+row3 =  [3,1,1,2,0,2,0,1,2,0,3] #27
+row4 =  [3,2,1,0,2,2,0,2,0,1,3] #36
+row5 =  [3,1,0,0,0,0,2,0,1,2,3] #45
+row6 =  [3,0,0,0,0,1,0,0,2,2,3] #54
 row7 =  [3,0,0,0,0,0,0,0,0,0,3] #63
 row8 =  [3,0,0,0,0,0,0,0,0,0,3] #72
 row9 =  [3,0,0,0,0,0,0,0,0,0,3] #81
@@ -216,7 +216,7 @@ def move_piece_get_ready(px,py):
     best_move_index = find_best_move()
 
     p_num_of_pieces = num_of_pieces[best_move_index] #number of pieces that are in the way
-    p_locations_of_removed_pieces = locations_of_removed_pieces[best_move_index]
+    p_locations_of_removed_pieces = locations_of_removed_pieces[best_move_index] #locations of the removed pieces from the board
     p_directions_list = drictions_list[best_move_index] #directions for reading
     p_path_locations = path_locations[best_move_index] #locations that the path traverses as string with soace between locations
 
@@ -264,7 +264,7 @@ def move_piece_get_ready(px,py):
     
     #************************************GOT DATA NOW EXECUTE*************************************************************
 
-    #first need to remove the pieces in the path
+    # need to remove the pieces in the path
     for location in p_list_locations_of_removed_pieces:
         lock = 0 #unlock lock
         coordnates = str_to_int_coor(location)
@@ -276,11 +276,16 @@ def move_piece_get_ready(px,py):
                 if check not in p_list_path_locations:
                     lock = 1
                     #we are going to move the piece to negative x directoion
+                    print("Move Piece left one")
                     #selector_down()
                     #move_x(x)
+                    print("move_x "+str(x) )
                     #move_y(y)
+                    print("move_y "+str(y) )
                     #selector_up()
                     #move_x(x-1)
+                    print("move_x "+str(x-1) )
+
                     #selector_down()
                     locations_to_move_back.append(int_to_string(x-1,y))
         if x < 9:
@@ -290,11 +295,15 @@ def move_piece_get_ready(px,py):
                     if lock == 0:
                         lock = 1
                         #we are going to move piece to positive x direction
+                        print("move Piece right one")
                         #selector_down()
                         #move_x(x)
+                        print("move_x "+str(x) )
                         #move_y(y)
+                        print("move_y "+str(y) )
                         #selector_up()
                         #move_x(x+1)
+                        print("move_x "+str(x+1) )
                         #selector_down()
                         locations_to_move_back.append(int_to_string(x+1,y))          
         
@@ -305,11 +314,16 @@ def move_piece_get_ready(px,py):
                     if lock == 0:
                         lock = 1
                         #move piece -1 in y direction
+                        print("move piece down one")
                         #selector_down()
                         #move_x(x)
+                        print("move_x "+str(x) )
                         #move_y(y)
+                        print("move_y "+str(y) )
                         #selector_up()
                         #move_y(y-1)
+                        print("move_y "+str(y-1) )
+
                         #selector_down()
                         locations_to_move_back.append(int_to_string(x,y-1))
                         
@@ -320,11 +334,16 @@ def move_piece_get_ready(px,py):
                     if lock == 0:
                         lock = 1
                         #move piece +1 in y direction 
+                        print("Move a piece up one")
                         #selector_down()
                         #move_x(x)
+                        print("move_x "+str(x) )
                         #move_y(y)
+                        print("move_y "+str(y) )
                         #selector_up()
                         #move_y(y+1)
+                        print("move_y "+str(y+1) )
+
                         #selector_down()
                         locations_to_move_back.append(int_to_string(x,y+1))
                                 
@@ -338,7 +357,7 @@ def move_piece_get_ready(px,py):
                     y = number[1]
 
                     #move one space at a time
-
+                    print("Need to move Piece off of the board")
                     #selector_down()
                     #move_x(x)
                     #move_y(y)
@@ -357,9 +376,10 @@ def move_piece_get_ready(px,py):
                     #move to empty location off of board
                     print("Off of the board")
                     locations_to_move_back.append("Off of Board")
-                    print("")
                     #selector_down()
-                    break
+                    #break
+        print("")
+
 
 def same_x(i, list_path_locations):
     global storage
@@ -402,6 +422,7 @@ def move_piece_onto_board(px,py,colour):
     global myList
     global storage
 
+    print("add piece to game board at " + list_path_locations[0])
     #get piece from dispenser and put at path_locations[0]
     # selector_up()
     start = 0
@@ -430,6 +451,7 @@ def move_piece_onto_board(px,py,colour):
     print("move_x "+str(x) )
 
     #selector_down()
+    print("")
 
     myList[py][px] = colour
 
@@ -489,7 +511,7 @@ def clean_up():
 
     count1 = 0
     for i in reversed_locations_to_move_back:
-        if i == "Off of the board":
+        if i == "Off of Board":
             #move back onto board
             count2 = 0
             for j in list_path_locations:
@@ -504,7 +526,7 @@ def clean_up():
                 print("move_y "+str(y))
 
                 count2 = count2 + 1
-                if j == locations_of_removed_pieces[count]:
+                if j == reversed_locations_of_removed_pieces[count1]:
                     break
         else:
             num1 = str_to_int_coor(reversed_locations_to_move_back[count1])
@@ -528,9 +550,12 @@ def clean_up():
             print("move_y "+str(y2))
             #selector_down()
 
+        count1 = count1 + 1
+        print("")
+
     clean_lists()
 
-move_piece_get_ready(3,4)
-#move_piece_onto_board()
-remove_piece_from_board(3,4)
+move_piece_get_ready(6,6)
+move_piece_onto_board(6,6,1)
+#remove_piece_from_board(3,4)
 clean_up()
