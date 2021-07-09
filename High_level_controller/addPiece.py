@@ -479,13 +479,17 @@ def move_piece_onto_board(px,py,colour):
     global storage
     moves = []
 
+    y = str_to_int_coor(list_path_locations[0])[1]
+    x = str_to_int_coor(list_path_locations[0])[0]
+
+    moves +=["z1", ['d'], ['y', y], ['x', x]]
 
     #print("add piece to game board at " + list_path_locations[0])
-    moves.append(["storage at", list_path_locations[0]])
+    # moves.append(["storage at", list_path_locations[0]])
 
     #get piece from dispenser and put at path_locations[0]
     # selector_up()
-    moves.append("z1")
+    # moves.append("z1")
 
     start = 0
     same_y(start,list_path_locations)
@@ -663,11 +667,11 @@ def add_piece_moves_wrapper(px,py,colour):
     moves_final = []
 
     moves = move_piece_get_ready(px,py)
-    moves_final.append(moves)
+    moves_final += moves
     moves = move_piece_onto_board(px,py,colour)
-    moves_final.append(moves)
+    moves_final += moves
     moves = clean_up()
-    moves_final.append(moves)
+    moves_final += moves
     return(moves_final)
 
 def add_piece_to_array(px,py,colour):
@@ -680,8 +684,8 @@ def add_piece_to_array(px,py,colour):
 # move_piece_onto_board(6,6,1)
 # #remove_piece_from_board(3,4)
 # clean_up()
-add_piece_to_array(6,4,2)
-add_piece_to_array(5,1,2)
-add_piece_to_array(7,1,2)
-print(add_piece_moves_wrapper(6,6,1))
-print(add_piece_moves_wrapper(6,7,1))
+# add_piece_to_array(6,1,2)
+# add_piece_to_array(5,1,2)
+# add_piece_to_array(7,1,2)
+# print(add_piece_moves_wrapper(6,6,1))
+# print(add_piece_moves_wrapper(6,7,1))
