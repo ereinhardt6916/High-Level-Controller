@@ -1,3 +1,5 @@
+
+
 import math
 #black 1 white 2 in array
 #          1 2 3 4 5 6 7 8 9   
@@ -144,7 +146,6 @@ def calculate_paths(x,y):
     #clean up for next time
         x_locations_to_check.clear()
     return
-
 
 def clean_lists():
     global num_of_pieces
@@ -612,7 +613,7 @@ def clean_up():
                 y = num[1]
 
                 #move_x(x)
-                print("move_x "+str(x) )
+                #print("move_x "+str(x) )
                 moves.append(['x',x])
                 #move_y(y)
                 print("move_y "+str(y))
