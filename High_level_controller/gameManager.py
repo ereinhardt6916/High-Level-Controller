@@ -1,9 +1,11 @@
 import logging
 import time
+from addPiece import add_piece_moves_wrapper
 
 class GameManager:
     def __init__(self):
         self.__mycolour = "Blac"
+        self.__myColourCode = 1
         self.__turn = 1
         self.__white_score = 0
         self.__black_score = 0
@@ -36,10 +38,22 @@ class GameManager:
                 # set the piece coordinate in the piece locator, otherwise it considers it is a new piece from the local player
                 self.__pl.setCoordinate(x, y)
 
+                ## get list of commands from path algorithm
+                listOfCmds = add_piece_moves_wrapper(x, y, (3-self.__myColourCode))
+                for cmd in listOfCmds:
+                    if isinstance(cmd, list):
+                        if cmd[0] == 'd' or cmd[0] == 'i':
+                            cmd.append(self.__curent_storage)
+                
+                ## append the final actions
+                listOfCmds += [['i', self.__curent_storage]]
+                logging.info(listOfCmds)
+                
+                ## send out to execute
                 # wait until the xy system not busy
                 while self.__xy.isBusy():
                     pass
-                self.__xy.executeCmd(["z1", ['d', self.__curent_storage], ['y', y], ['x', x], "z0", ['x', 9], ['i', self.__curent_storage]])
+                self.__xy.executeCmd(listOfCmds)
                 while self.__xy.isBusy():
                     pass
                 #************************************************************************************
@@ -111,6 +125,7 @@ class GameManager:
                 self.__turn = 1
             elif(code == "Blac"):
                 self.__mycolour = "Blac"
+                self.__myColourCode = 1
                 self.__curent_storage = 4
                 logging.info("[main]I am Black")
                 
@@ -120,6 +135,7 @@ class GameManager:
                
             elif(code == "Whit"):
                 self.__mycolour = "Whit"
+                self.__myColourCode = 2
                 self.__curent_storage = 1
                 logging.info("[main]I am White")
                 
