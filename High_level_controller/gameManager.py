@@ -1,6 +1,6 @@
 import logging
 import time
-from addPiece import add_piece_moves_wrapper
+from addPiece import add_piece_moves_wrapper, remove_piece_moves_wrapper
 
 class GameManager:
     def __init__(self):
@@ -40,10 +40,6 @@ class GameManager:
 
                 ## get list of commands from path algorithm
                 listOfCmds = add_piece_moves_wrapper(x, y, (3-self.__myColourCode))
-                for cmd in listOfCmds:
-                    if isinstance(cmd, list):
-                        if cmd[0] == 'd' or cmd[0] == 'i':
-                            cmd.append(self.__curent_storage)
                 
                 ## append the final actions
                 listOfCmds += [['i', self.__curent_storage]]
@@ -57,16 +53,25 @@ class GameManager:
                 while self.__xy.isBusy():
                     pass
                 #************************************************************************************
-                pass
+                
             elif(code[0] == "R"):
                 # convert web coordinate to physical coordinate
                 x = 10 - int(code[3])
                 y = 10 - int(code[1])
                 #Remove a Piece from the board in the location of x.y the next three chars in string
-                #***********************************************************************************
-                #remove_piece_from_gameboard(x,y)
-                #************************************************************************************            
-                pass
+                self.__pl.resetCoordinate(x, y)
+                
+                listOfCmds = remove_piece_moves_wrapper(x, y, (3-self.__myColourCode))
+
+                ## send out to execute
+                # wait until the xy system not busy
+                while self.__xy.isBusy():
+                    pass
+                self.__xy.executeCmd(listOfCmds)
+                while self.__xy.isBusy():
+                    pass
+
+                
             elif(code == "Skip"):
                 #opponent decided not to play their turn
                 self.__lcd.lcd_clear()
@@ -126,7 +131,7 @@ class GameManager:
             elif(code == "Blac"):
                 self.__mycolour = "Blac"
                 self.__myColourCode = 1
-                self.__curent_storage = 4
+                self.__curent_storage = 2
                 logging.info("[main]I am Black")
                 
                 self.__lcd.lcd_clear()

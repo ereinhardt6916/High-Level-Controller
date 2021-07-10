@@ -42,8 +42,8 @@ class XY_selector:
         self.__connection.write("z0".encode('utf-8'))
     
     def __getPiece(self, storage, rtn_pos):
-        if storage > 4:
-            storage = 4
+        if storage > 2:
+            storage = 2
         elif storage < 1:
             storage = 1
         
@@ -53,12 +53,17 @@ class XY_selector:
             rtn_pos = 1
         self.__connection.write(f"s{storage}.{rtn_pos}".encode('utf-8'))
     
-    def __dispensePiece(self, storage):
-        if storage > 4:
-            storage = 4
-        elif storage < 1:
-            storage = 1
-        self.__connection.write(f"d{storage}".encode('utf-8'))
+    def __dispensePiece_1(self):
+        self.__connection.write(f"d1".encode('utf-8'))
+    
+    def __dispensePiece_2(self):
+        self.__connection.write(f"d2".encode('utf-8'))
+
+    def __removePiece_1(self):
+        self.__connection.write(f"r1".encode('utf-8'))
+    
+    def __removePiece_2(self):
+        self.__connection.write(f"r2".encode('utf-8'))
     
     def __home(self):
         self.__connection.write("home".encode('utf-8'))
@@ -86,6 +91,14 @@ class XY_selector:
                         self.__zUp()
                     elif item == "z0":
                         self.__zDown()
+                    elif item = "d1":
+                        self.__dispensePiece_1()
+                    elif item = "d2":
+                        self.__dispensePiece_2()
+                    elif item = "r1":
+                        self.__removePiece_1()
+                    elif item = "r2":
+                        self.__removePiece_2()
                     else:
                         break
                 elif isinstance(item, list): 
@@ -97,8 +110,6 @@ class XY_selector:
                         self.__getPiece(item[1], item[2])
                     elif item[0] == 'i':
                         self.__MoveToIdle(item[1])
-                    elif item[0] == 'd':
-                        self.__dispensePiece(item[1])
                     else:
                         break
                 else:

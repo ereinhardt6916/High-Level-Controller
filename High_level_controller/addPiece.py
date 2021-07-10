@@ -492,9 +492,9 @@ def move_piece_onto_board(px,py,colour):
     y = str_to_int_coor(list_path_locations[0])[1]
     x = str_to_int_coor(list_path_locations[0])[0]
     if colour == 1:
-        moves +=["z1", ['d1'], ['y', y], ['x', x]]
+        moves +=["z1", 'd1', ['y', y], ['x', x]]
     elif colour == 2:
-        moves +=["z1", ['d2'], ['y', y], ['x', x]]
+        moves +=["z1", 'd2', ['y', y], ['x', x]]
 
     #print("add piece to game board at " + list_path_locations[0])
     # moves.append(["storage at", list_path_locations[0]])
@@ -717,12 +717,12 @@ def add_piece_to_array(px,py,colour):
     myList[py][px] = colour
 
 
-# move_piece_get_ready(6,6)
-# move_piece_onto_board(6,6,1)
-# #remove_piece_from_board(3,4)
-# clean_up()
-# add_piece_to_array(6,1,2)
-# add_piece_to_array(5,1,2)
-# add_piece_to_array(7,1,2)
-# print(remove_piece_moves_wrapper(6,6))
-#print(add_piece_moves_wrapper(6,6,1))
+move_piece_get_ready(6,6)
+move_piece_onto_board(6,6,1)
+remove_piece_from_board(3,4)
+clean_up()
+add_piece_to_array(6,1,2)
+add_piece_to_array(5,1,2)
+add_piece_to_array(7,1,2)
+print(remove_piece_moves_wrapper(6,6))
+print(add_piece_moves_wrapper(6,6,1))
