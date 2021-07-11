@@ -29,8 +29,8 @@ class XY_selector:
         self.__connection.write(f"y{y_target}".encode('utf-8'))
     
     def __MoveToIdle(self, target):
-        if target > 4:
-            target = 4
+        if target > 2:
+            target = 2
         elif target < 1:
             target = 1
         self.__connection.write(f"i{target}".encode('utf-8'))
@@ -91,14 +91,18 @@ class XY_selector:
                         self.__zUp()
                     elif item == "z0":
                         self.__zDown()
-                    elif item = "d1":
+                    elif item == "d1":
                         self.__dispensePiece_1()
-                    elif item = "d2":
+                    elif item == "d2":
                         self.__dispensePiece_2()
-                    elif item = "r1":
+                    elif item == "r1":
                         self.__removePiece_1()
-                    elif item = "r2":
+                    elif item == "r2":
                         self.__removePiece_2()
+                    elif item == "i1":
+                        self.__MoveToIdle(1)
+                    elif item == "i2":
+                        self.__MoveToIdle(2)
                     else:
                         break
                 elif isinstance(item, list): 
@@ -108,8 +112,6 @@ class XY_selector:
                         self.__yMoveTo(item[1])
                     elif item[0] == 's':
                         self.__getPiece(item[1], item[2])
-                    elif item[0] == 'i':
-                        self.__MoveToIdle(item[1])
                     else:
                         break
                 else:
@@ -151,6 +153,9 @@ class XY_selector:
     
     def isBusy(self):
         return self.__busy_flag
+    
+    def directCmd(self, cmd):
+        self.__connection.write(cmd.encode('utf-8'))
 
 
                 

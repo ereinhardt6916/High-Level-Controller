@@ -718,8 +718,8 @@ def add_piece_to_array(px,py,colour):
     myList[py][px] = colour
 
 
-#add_piece_to_array(6,1,2)
-#add_piece_to_array(5,1,2)
-#add_piece_to_array(7,1,2)
-#print(remove_piece_moves_wrapper(6,6))
-#print(add_piece_moves_wrapper(6,6,1))
+# add_piece_to_array(6,1,2)
+# add_piece_to_array(5,1,2)
+# add_piece_to_array(7,1,2)
+# print(remove_piece_moves_wrapper(6,6))
+# print(add_piece_moves_wrapper(6,6,1))
