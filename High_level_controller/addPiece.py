@@ -4,9 +4,9 @@ import math
 #black 1 white 2 in array
 #          1 2 3 4 5 6 7 8 9   
 row0 =  [3,3,3,3,3,3,3,3,3,3,3] #
-row1 =  [3,0,0,0,0,0,0,0,0,0,3] #9
-row2 =  [3,0,0,0,0,0,0,0,0,0,3] #18
-row3 =  [3,0,0,0,0,0,0,0,0,0,3] #27
+row1 =  [3,1,1,1,1,0,0,0,1,1,3] #9
+row2 =  [3,2,1,2,2,0,1,1,2,1,3] #18
+row3 =  [3,0,0,0,0,1,0,0,0,0,3] #27
 row4 =  [3,0,0,0,0,0,0,0,0,0,3] #36
 row5 =  [3,0,0,0,0,0,0,0,0,0,3] #45
 row6 =  [3,0,0,0,0,0,0,0,0,0,3] #54
@@ -299,7 +299,7 @@ def move_piece_get_ready(px,py):
                         moves.append(['x',x-1])
                         #print("move_x "+str(x-1) )
                         #selector_down()
-                        moves.append("z0")
+                        #moves.append("z0")
                         locations_to_move_back.append(int_to_string(x-1,y))
             if x < 9:
                 if myList[y][x+1] == 0:
@@ -323,7 +323,7 @@ def move_piece_get_ready(px,py):
                             moves.append(['x',x+1])
                             #print("move_x "+str(x-1) )
                             #selector_down()
-                            moves.append("z0")
+                            #moves.append("z0")
                             locations_to_move_back.append(int_to_string(x+1,y))          
             
             if y > 1: 
@@ -348,7 +348,7 @@ def move_piece_get_ready(px,py):
                             moves.append(['y',y-1])
                             #print("move_x "+str(x-1) )
                             #selector_down()
-                            moves.append("z0")
+                            #moves.append("z0")
                             locations_to_move_back.append(int_to_string(x,y-1))
                             
             if y < 9:
@@ -373,7 +373,7 @@ def move_piece_get_ready(px,py):
                             moves.append(['y',y+1])
                             #print("move_y "+str(y+1) )
                             #selector_down()
-                            moves.append("z0")
+                            #moves.append("z0")
                             locations_to_move_back.append(int_to_string(x,y+1))
                                     
             if lock == 0:
@@ -442,7 +442,7 @@ def move_piece_get_ready(px,py):
                             moves.append("r2")
 
                         #selector_down()
-                        moves.append("z0 go home?")
+                        #moves.append("z0")
                         #break
             #print("")
     return(moves)
@@ -492,9 +492,9 @@ def move_piece_onto_board(px,py,colour):
     y = str_to_int_coor(list_path_locations[0])[1]
     x = str_to_int_coor(list_path_locations[0])[0]
     if colour == 1:
-        moves +=["z1", 'd1', ['y', y], ['x', x]]
+        moves +=["z0","i1","z1", 'd1', ['y', y], ['x', x]]
     elif colour == 2:
-        moves +=["z1", 'd2', ['y', y], ['x', x]]
+        moves +=["z0","i2","z1",'d2', ['y', y], ['x', x]]
 
     #print("add piece to game board at " + list_path_locations[0])
     # moves.append(["storage at", list_path_locations[0]])
@@ -522,7 +522,7 @@ def move_piece_onto_board(px,py,colour):
     same_y(storage,list_path_locations)
     cor = str_to_int_coor(list_path_locations[storage])
     y = cor[1]
-    if y != moves[4][1]:
+    if y != moves[6][1]:
         #move_y(y)
         moves.append(['y',y])
         #print("move_y "+str(y) )
@@ -530,13 +530,13 @@ def move_piece_onto_board(px,py,colour):
     same_x(storage,list_path_locations)
     cor = str_to_int_coor(list_path_locations[storage])
     x = cor[0]
-    if x != moves[5][1]:
+    if x != moves[7][1]:
         #move_x(x)
         moves.append(['x',x])
         #print("move_x "+str(x) )
 
     #selector_down()
-    moves.append("z0 go home?")
+    #moves.append("z0")
 
     #print("")
 
@@ -603,7 +603,7 @@ def remove_piece_from_board(px,py):
         moves.append("r1")
     elif myList[py][px] == 2:
         moves.append("r2")
-    moves.append("z0")
+    #moves.append("z0")
 
     myList[py][px] = 0
 
@@ -628,9 +628,9 @@ def clean_up():
             x = num[0]
             y = num[1]
             if myList[colour_value[1]][colour_value[0]] == 1:
-                moves +=["z1", ['d1']] #black
+                moves +=["z0","i1","z1","d1"] #black
             else:
-                moves +=["z1", ['d2']] #white
+                moves +=["z0","i2","z1","d2"] #white
 
 
             #move back onto board
@@ -652,7 +652,7 @@ def clean_up():
 
                 count2 = count2 + 1
                 if j == reversed_locations_of_removed_pieces[count1]:
-                    moves.append("z0 go home?")
+                    #moves.append("z0")
                     break
         else:
             num1 = str_to_int_coor(reversed_locations_to_move_back[count1])
@@ -681,11 +681,12 @@ def clean_up():
             #print("move_y "+str(y2))
             moves.append(['y',y2])
             #selector_down()
-            moves.append("z0")
+            #moves.append("z0")
             
         count1 = count1 + 1
         #print("")
-
+    
+    moves.append("z0")
     clean_lists()
     return(moves)
 
@@ -717,12 +718,8 @@ def add_piece_to_array(px,py,colour):
     myList[py][px] = colour
 
 
-move_piece_get_ready(6,6)
-move_piece_onto_board(6,6,1)
-remove_piece_from_board(3,4)
-clean_up()
 add_piece_to_array(6,1,2)
 add_piece_to_array(5,1,2)
 add_piece_to_array(7,1,2)
-print(remove_piece_moves_wrapper(6,6))
+#print(remove_piece_moves_wrapper(6,6))
 print(add_piece_moves_wrapper(6,6,1))
