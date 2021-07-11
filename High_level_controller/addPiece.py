@@ -4,9 +4,9 @@ import math
 #black 1 white 2 in array
 #          1 2 3 4 5 6 7 8 9   
 row0 =  [3,3,3,3,3,3,3,3,3,3,3] #
-row1 =  [3,1,1,1,1,0,0,0,1,1,3] #9
-row2 =  [3,2,1,2,2,0,1,1,2,1,3] #18
-row3 =  [3,0,0,0,0,1,0,0,0,0,3] #27
+row1 =  [3,0,0,0,0,0,0,0,0,0,3] #9
+row2 =  [3,0,0,0,0,0,0,0,0,0,3] #18
+row3 =  [3,0,0,0,0,0,0,0,0,0,3] #27
 row4 =  [3,0,0,0,0,0,0,0,0,0,3] #36
 row5 =  [3,0,0,0,0,0,0,0,0,0,3] #45
 row6 =  [3,0,0,0,0,0,0,0,0,0,3] #54
@@ -718,8 +718,8 @@ def add_piece_to_array(px,py,colour):
     myList[py][px] = colour
 
 
-add_piece_to_array(6,1,2)
-add_piece_to_array(5,1,2)
-add_piece_to_array(7,1,2)
+#add_piece_to_array(6,1,2)
+#add_piece_to_array(5,1,2)
+#add_piece_to_array(7,1,2)
 #print(remove_piece_moves_wrapper(6,6))
-print(add_piece_moves_wrapper(6,6,1))
+#print(add_piece_moves_wrapper(6,6,1))
