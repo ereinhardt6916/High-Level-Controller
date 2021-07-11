@@ -27,16 +27,14 @@ def main():
         # game manager init
         gm.setup(socket, xy, pl, encoder, lcd)
 
+
         # start the game loop
         # gm.startGame()
 
-        # test xy control
-        # xy.executeCmd(["z0", ['x', 9], ['i', 4], "z1", ['d', 1], ['y', 6], ['x', 9], "z0"])
         # while True:
-        #     if pl.isNewPiece():
-        #         logging.info("[main]new piece: " + str(pl.getNewCoordinate()))
-
-        #     time.sleep(0.1)
+        #     cmd = str(input("cmd: "))
+        #     xy.directCmd(cmd)
+        
     except Exception as e:
         logging.info(str(e))
 

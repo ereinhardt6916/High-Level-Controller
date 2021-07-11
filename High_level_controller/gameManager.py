@@ -1,6 +1,6 @@
 import logging
 import time
-from addPiece import add_piece_moves_wrapper, remove_piece_moves_wrapper
+from addPiece import add_piece_moves_wrapper, remove_piece_moves_wrapper, add_piece_to_array
 
 class GameManager:
     def __init__(self):
@@ -18,6 +18,18 @@ class GameManager:
 
         logging.info("[main]waiting for a new piece from remote player")
         self.__receMesg()
+    
+    def __cmdConversion(self, listOfCmds):
+        for cmd in listOfCmds:
+            if isinstance(cmd, list):
+                if cmd[0] == 'x':
+                    cmd[0] = 'y'
+                    cmd[1] = 10 - cmd[1]
+                elif cmd[0] == 'y':
+                    cmd[0] = 'x'
+                    cmd[1] = 10 - cmd[1]
+        
+        return listOfCmds
 
     def __receMesg(self):
         data = self.__socket.read_data()
@@ -28,21 +40,23 @@ class GameManager:
         for i in range(0, len(mesg), 4):
             code = mesg[i:i+4]
             if(code[0] == "A"):
-                # convert web coordinate to physical coordinate
-                x = 10 - int(code[3])
-                y = 10 - int(code[1])
+                x_web = int(code[1])
+                y_web = int(code[3])
+                x_phys = 10 - y_web
+                y_phys = 10 - x_web
                 #add a Piece to the board in the location of x.y the next three chars in string
                 #***********************************************************************************
-                #add_piece_to_gameboard(x,y)
-                
                 # set the piece coordinate in the piece locator, otherwise it considers it is a new piece from the local player
-                self.__pl.setCoordinate(x, y)
+                self.__pl.setCoordinate(x_phys, y_phys)
 
                 ## get list of commands from path algorithm
-                listOfCmds = add_piece_moves_wrapper(x, y, (3-self.__myColourCode))
-                
+                listOfCmds = add_piece_moves_wrapper(x_web, y_web, (3-self.__myColourCode))
+
+                ## convert list of command for physical board
+                listOfCmds = self.__cmdConversion(listOfCmds)
+
                 ## append the final actions
-                listOfCmds += [['i', self.__curent_storage]]
+                listOfCmds += ['i' + str(self.__curent_storage)]
                 logging.info(listOfCmds)
                 
                 ## send out to execute
@@ -55,13 +69,22 @@ class GameManager:
                 #************************************************************************************
                 
             elif(code[0] == "R"):
-                # convert web coordinate to physical coordinate
-                x = 10 - int(code[3])
-                y = 10 - int(code[1])
+                x_web = int(code[1])
+                y_web = int(code[3])
+                x_phys = 10 - y_web
+                y_phys = 10 - x_web
                 #Remove a Piece from the board in the location of x.y the next three chars in string
-                self.__pl.resetCoordinate(x, y)
+                self.__pl.resetCoordinate(x_phys, y_phys)
                 
-                listOfCmds = remove_piece_moves_wrapper(x, y, (3-self.__myColourCode))
+                ## get list of commands from path algorithm
+                listOfCmds = remove_piece_moves_wrapper(x_web, y_web)
+
+                ## convert list of command for physical board
+                listOfCmds = self.__cmdConversion(listOfCmds)
+
+                ## append the final actions
+                listOfCmds += ['i' + str(self.__curent_storage)]
+                logging.info(listOfCmds)
 
                 ## send out to execute
                 # wait until the xy system not busy
@@ -153,7 +176,7 @@ class GameManager:
             self.__sendPiece("void")
         
         # let the selector wait at the idle space
-        self.__xy.executeCmd(["z0", ['x', 9], ['i', self.__curent_storage]])
+        self.__xy.executeCmd(["z0", ['x', 9], 'i'+ str(self.__curent_storage)])
         # have to wait until the init finished
         while self.__xy.isBusy():
             pass
@@ -169,6 +192,9 @@ class GameManager:
             # get the new piece coordinate
             newCoordinate = self.__pl.getNewCoordinate()
             logging.info("[main]new coordinate: " + str(newCoordinate))
+
+            # update the addPiece algorithm
+            add_piece_to_array(10-newCoordinate[1], 10-newCoordinate[0], self.__myColourCode)
 
             # need to convert to the coordinate format for web interface
             convertedCoordinate = [10-newCoordinate[1], 10-newCoordinate[0]]
