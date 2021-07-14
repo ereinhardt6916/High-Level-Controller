@@ -1,5 +1,5 @@
-
-
+import os
+import time
 import math
 #black 1 white 2 in array
 #          1 2 3 4 5 6 7 8 9   
@@ -717,9 +717,158 @@ def add_piece_to_array(px,py,colour):
 
     myList[py][px] = colour
 
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
-# add_piece_to_array(6,1,2)
-# add_piece_to_array(5,1,2)
-# add_piece_to_array(7,1,2)
-# print(remove_piece_moves_wrapper(6,6))
-# print(add_piece_moves_wrapper(6,6,1))
+def show_moves(px,py,colour_in,a_or_r):
+    global myList
+    curr_x = "e"
+    curr_y = "e"
+    curr_colour = "e"
+
+    rown1 = list("   R1-D1-D2-R2   ")
+    row0  = list("   -- -- -- --   ")
+    row1  = list("- - - - - - - - -")
+    row2  = list("- - - - - - - - -")
+    row3  = list("- - - - - - - - -")
+    row4  = list("- - - - - - - - -")
+    row5  = list("- - - - - - - - -")
+    row6  = list("- - - - - - - - -")
+    row7  = list("- - - - - - - - -")
+    row8  = list("- - - - - - - - -")
+    row9  = list("- - - - - - - - -")
+    board = [row1, row2, row3, row4, row5, row6, row7, row8, row9]
+
+    #match board to my list 
+    for i in range(9):
+        for j in range(9):
+            if myList[i+1][j+1] == 0:
+                board[i][j*2] = "-"
+            elif myList[i+1][j+1] == 1:
+                board[i][j*2] = "b"
+            elif myList[i+1][j+1] == 2:
+                board[i][j*2] = "w"
+
+    if a_or_r == "add":
+        commands = add_piece_moves_wrapper(px,py,colour_in)
+    elif a_or_r == "remove":
+        commands = remove_piece_moves_wrapper(px,py)
+    else:
+        print("Please put add or remove")
+        return
+
+    board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+    cls()
+    print(*board_str, sep="\n")
+    time.sleep(1)
+    for cmd in commands:
+        if cmd == "z0":
+            z = 0
+        elif cmd == "z1":
+            z = 1
+        elif cmd == "i1":
+            row0[6]= "_"
+            row0[7]= "_"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+        elif cmd == "i2":
+            row0[9]= "_"
+            row0[10]= "_"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+            row0[6]= "-"
+            row0[7]= "-"
+        elif cmd == "d1":
+            row0[6]= "_"
+            row0[7]= "B"
+            curr_colour = "B"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+            row0[6]= "-"
+            row0[7]= "-"
+            curr_y = "e"
+            curr_x = "e"
+        elif cmd == "d2":
+            row0[9]= "_"
+            row0[10]= "W"
+            curr_colour = "W"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+            row0[9]= "-"
+            row0[10]= "-"
+            curr_y = "e"
+            curr_x = "e"
+        elif cmd == "r1":
+            row0[3]= "_"
+            row0[4]= "B"
+            board[curr_y-1][curr_x*2-2] = "-"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+            row0[3]= "-"
+            row0[4]= "-"
+            curr_y = "e"
+            curr_x = "e"
+        elif cmd == "r2":
+            row0[12]= "_"
+            row0[13]= "W"
+            board[curr_y-1][curr_x*2-2] = "-"
+            board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+            cls()
+            print(*board_str, sep="\n")
+            row0[12]= "-"
+            row0[13]= "-"
+            curr_y = "e"
+            curr_x = "e"
+
+
+        elif isinstance(cmd, list):
+            if cmd[0] == "x":
+                prev_x = curr_x
+                curr_x = cmd[1]
+                if (curr_x == "e" or curr_y == "e"):
+                    pass
+                else:
+                    if prev_x != "e":
+                        curr_colour = board[curr_y-1][prev_x*2-2] 
+                        
+                    if z == 1: 
+                        if prev_x != "e":
+                            board[curr_y-1][prev_x*2-2] = "-"
+
+                        board[curr_y-1][curr_x*2-2] = curr_colour
+
+                        board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+                        cls()
+                        print(*board_str, sep="\n")
+               
+            if cmd[0] == "y":
+                prev_y = curr_y
+                curr_y = cmd[1]
+                if (curr_x == "e" or curr_y == "e"):
+                    pass
+                else:
+                    
+                    if prev_y != "e":
+                        curr_colour = board[prev_y-1][curr_x*2-2]
+                        
+                    if z ==1: 
+                        if prev_y != "e":
+                            board[prev_y-1][curr_x*2-2] = "-"
+
+                        board[curr_y-1][curr_x*2-2] = curr_colour
+
+                        board_str = ["".join(rown1),"".join(row0),"".join(row1),"".join(row2),"".join(row3),"".join(row4),"".join(row5),"".join(row6),"".join(row7),"".join(row8),"".join(row9)]
+                        cls()
+                        print(*board_str, sep="\n")
+
+        print(cmd)
+        time.sleep(1)
+
+
+
+#show_moves(2,2,2, "remove")
