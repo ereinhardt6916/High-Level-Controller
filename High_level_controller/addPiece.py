@@ -97,7 +97,7 @@ def calculate_paths(x,y):
                     drictions = drictions + "up "
                     path_coordinates = path_coordinates + str(x_locations_to_check[0]) + "." + str(y_locations_to_check[k]) + " "
                     if(myList[y_locations_to_check[k]][x_locations_to_check[0]] != 0):
-                        if (str(y_locations_to_check[k]) + "." + str(x_locations_to_check[0])) != (str(x) + "." + str(y)):
+                        if (str(x_locations_to_check[0]) + "." + str(y_locations_to_check[k])) != (str(x) + "." + str(y)):
                             num_of_pieces_counter += 1
                             remove_locations = remove_locations + str(x_locations_to_check[0]) + "." + str(y_locations_to_check[k]) + " "
                     p = 1
@@ -110,7 +110,7 @@ def calculate_paths(x,y):
                         drictions = drictions + "side "
                         path_coordinates = path_coordinates + str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k]) + " "
                         if(myList[y_locations_to_check[k]][x_locations_to_check[l]] != 0):
-                            if (str(y_locations_to_check[k]) + "." + str(x_locations_to_check[l])) != (str(x) + "." + str(y)):
+                            if (str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k])) != (str(x) + "." + str(y)):
                                 num_of_pieces_counter += 1
                                 remove_locations = remove_locations + str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k]) + " "
 
@@ -121,7 +121,7 @@ def calculate_paths(x,y):
                     drictions = drictions + "up "
                     path_coordinates = path_coordinates + str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k+m+1]) + " "
                     if(myList[y_locations_to_check[k+m+1]][x_locations_to_check[l]] != 0):
-                        if (str(y_locations_to_check[k+m+1]) + "." + str(x_locations_to_check[l])) != (str(x) + "." + str(y)):
+                        if (str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k+m+1])) != (str(x) + "." + str(y)):
                             num_of_pieces_counter += 1
                             remove_locations = remove_locations + str(x_locations_to_check[l]) + "." + str(y_locations_to_check[k+m+1]) + " "
   
@@ -131,7 +131,7 @@ def calculate_paths(x,y):
                     drictions = drictions + "side "
                     path_coordinates = path_coordinates + str(x_locations_to_check[l+n+1]) + "." + str(y_locations_to_check[k+m+1]) + " "
                     if(myList[y_locations_to_check[k+m+1]][x_locations_to_check[l+n+1]] != 0):
-                        if (str(y_locations_to_check[k+m+1]) + "." + str(x_locations_to_check[l+n+1])) != (str(x) + "." + str(y)):
+                        if (str(x_locations_to_check[l+n+1]) + "." + str(y_locations_to_check[k+m+1])) != (str(x) + "." + str(y)):
 
                             num_of_pieces_counter += 1  
                             remove_locations = remove_locations + str(x_locations_to_check[l+n+1]) + "." + str(y_locations_to_check[k+m+1]) + " "
@@ -825,7 +825,6 @@ def show_moves(px,py,colour_in,a_or_r):
             curr_y = "e"
             curr_x = "e"
 
-
         elif isinstance(cmd, list):
             if cmd[0] == "x":
                 prev_x = curr_x
@@ -871,4 +870,4 @@ def show_moves(px,py,colour_in,a_or_r):
 
 
 
-#show_moves(2,2,2, "remove")
+#show_moves(5,9,2, "add")
