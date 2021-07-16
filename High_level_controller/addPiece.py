@@ -492,9 +492,9 @@ def move_piece_onto_board(px,py,colour):
     y = str_to_int_coor(list_path_locations[0])[1]
     x = str_to_int_coor(list_path_locations[0])[0]
     if colour == 1:
-        moves +=["z0","i1","z1", 'd1', ['y', y], ['x', x]]
+        moves +=["z0","i1","z1", 'd1', ['x', x], ['y', y]]
     elif colour == 2:
-        moves +=["z0","i2","z1",'d2', ['y', y], ['x', x]]
+        moves +=["z0","i2","z1",'d2',  ['x', x], ['y', y]]
 
     #print("add piece to game board at " + list_path_locations[0])
     # moves.append(["storage at", list_path_locations[0]])
