@@ -29,19 +29,15 @@ def main():
         gm.setup(socket, xy, pl, encoder, lcd)
         encoder.callbackAttach(valueChanged, buttonPushed)
 
-
         # start the game loop
-        # gm.startGame()
-
-        # while True:
-        #     cmd = str(input("cmd: "))
-        #     xy.directCmd(cmd)
+        while True:
+            try:
+                gm.startGame()
+            except Exception as e:
+                logging.info(str(e))
         
     except Exception as e:
         logging.info(str(e))
-
-    while True:
-        gm.startGame()
 
     GPIO.cleanup()
 
