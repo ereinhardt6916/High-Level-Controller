@@ -1,6 +1,6 @@
 import logging
 import time
-from addPiece import add_piece_moves_wrapper, remove_piece_moves_wrapper, add_piece_to_array
+from addPiece import add_piece_moves_wrapper, remove_piece_moves_wrapper, add_piece_to_array, myList
 from datetime import datetime
 
 class GameManager:
@@ -238,7 +238,7 @@ class GameManager:
             self.__sendPiece("void")
         
         # let the selector wait at the idle space
-        self.__xy.executeCmd(["z0", ['x', 9], 'i'+ str(self.__curent_storage)])
+        self.__xy.executeCmd(['i'+ str(self.__curent_storage)])
         # have to wait until the init finished
         while self.__xy.isBusy():
             pass
@@ -377,7 +377,131 @@ class GameManager:
                 self.__lcdScenario = 4
             elif self.__lcdScenario == 4:
                 self.__buttonPushedFlag = True
+    
+    def startDemo(self, layout=[]):
+        self.__lcd.lcd_clear()
+        self.__lcd.lcd_display_string("   Demo mode    ", 1)
 
+        # let the selector wait at the idle space
+        self.__xy.executeCmd(['i'+ str(self.__curent_storage)])
+        # have to wait until the init finished
+        while self.__xy.isBusy():
+            pass
+
+        if layout == []:
+            for i in [1, 2]:
+                # add black pieces
+                if i == 1:
+                    piece_colour = "black"
+                else:
+                    piece_colour = "white"
+                input(f"Add {piece_colour} Pieces, press enter to scan layout")
+                piece_layout = self.__pl.getPieceLayout()
+                # print(piece_layout)
+
+                # find new coordinates
+                coordinate_list = []
+                x_phys = 1
+                y_phys = 1
+                for list_item in piece_layout:
+                    for piece_item in list_item:
+                        if piece_item == 0:
+                            coordinate_list.append([x_phys, y_phys])
+                        y_phys += 1
+                    y_phys = 1
+                    x_phys += 1
+                
+                # add to algorithm
+                for coordinate in coordinate_list:
+                    if myList[10-coordinate[0]][10-coordinate[1]] == 0:
+                        add_piece_to_array(10-coordinate[1], 10-coordinate[0], i)
+                
+                print("Current piece layout: ")
+                self.printLayout()
+        
+        else:
+            for y in range(9):
+                for x in range(9):
+                    if layout[y][x] == 1:
+                        add_piece_to_array(x+1, y+1, 1)
+                    elif layout[y][x] == 2:
+                        add_piece_to_array(x+1, y+1, 2)
+            
+            print("Current piece layout: ")
+            self.printLayout()
+
+        # get operation from user. Format should be "awx.y" or "rx.y" in web coordinate.
+        while True:
+            exit_flag = False
+            continue_flag = False
+            colour_code = 1
+            listOfCmds = []
+            while not continue_flag:
+                user_input = input("Operation: ")
+                if user_input == "exit":
+                    exit_flag = True
+                    break
+
+                if len(user_input) == 5 and user_input[0] == 'a':
+                    if user_input[1] == 'b' or user_input[1] == 'w':
+                        if user_input[1] == 'b':
+                            colour_code = 1
+                        elif user_input[1] == 'w':
+                            colour_code = 2
+                        cmd_coodinate = user_input[2:].split('.')
+                        ## return to the storage
+                        listOfCmds += ['z0','i'+str(colour_code)]
+
+                        ## get list of commands from path algorithm
+                        listOfCmds = add_piece_moves_wrapper(int(cmd_coodinate[0]), int(cmd_coodinate[1]), colour_code)
+
+                        ## convert list of command for physical board
+                        listOfCmds = self.__cmdConversion(listOfCmds)
+
+                        listOfCmds += ['i' + str(colour_code)]
+                        continue_flag = True
+                    else:
+                        print("invalid colour code")
+
+                elif len(user_input) == 4 and user_input[0] == 'r':
+                    cmd_coodinate = user_input[1:].split('.')
+                    listOfCmds = remove_piece_moves_wrapper(int(cmd_coodinate[0]), int(cmd_coodinate[1]))
+
+                    ## convert list of command for physical board
+                    listOfCmds = self.__cmdConversion(listOfCmds)
+
+                    listOfCmds += ['i2']
+                    continue_flag = True
+                else:
+                    print("invalid command")
+            
+            if exit_flag:
+                print("exit demo")
+                break
+            
+            if len(listOfCmds) != 0:
+                logging.info(listOfCmds)
+
+                ## send out to execute
+                # wait until the xy system not busy
+                while self.__xy.isBusy():
+                    pass
+                self.__xy.executeCmd(listOfCmds)
+                while self.__xy.isBusy():
+                    pass
+
+    
+    def printLayout(self):
+        for list_item in myList[1:-1]:
+            for piece_item in list_item[1:-1]:
+                if piece_item == 0:
+                    print("_ ", end=" ")
+                elif piece_item == 1:
+                    print("B ", end=" ")
+                elif piece_item == 2:
+                    print("W ", end=" ")
+            print(" ")
+            
 
 
         
