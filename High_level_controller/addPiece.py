@@ -399,39 +399,51 @@ def move_piece_get_ready(px,py):
 
                         #selector_up()
                         moves.append("z1")
-                        for j in reversed(range(0, count-1)):
-                            number = str_to_int_coor(p_list_path_locations[j])
-                            x = number[0]
-                            y = number[1]
 
+                        #move off of game board
+
+                        reversed_move_locations = p_list_path_locations.copy()
+                        reversed_move_locations.reverse()
+                        starting_index = len(p_list_path_locations) - count
+
+                        same_x(starting_index,reversed_move_locations)
+                        cor = str_to_int_coor(reversed_move_locations[storage])
+                        x = cor[0]
+                        moves.append(['x',x])
+
+                        same_y(storage,reversed_move_locations)
+                        cor = str_to_int_coor(reversed_move_locations[storage])
+                        y = cor[1]
+                        #move_y(y)
+                        moves.append(['y',y])
+
+                        same_x(storage,reversed_move_locations)
+                        cor = str_to_int_coor(reversed_move_locations[storage])
+                        x = cor[0]
+                        if x != moves[-2][1]:
                             #move_x(x)
-                            #print("move_x "+str(x))
                             moves.append(['x',x])
-                            #move_y(y)
-                            #print("move_y "+str(y) )
-                            moves.append(['y',y])
 
-                        #Test that did not work.  May go back to later
-                            # if j == (count-2):
-                            #     #move_x(x)
-                            #     #print("move_x "+str(x))
-                            #     moves.append(['x',x])
-                            #     #move_y(y)
-                            #     #print("move_y "+str(y) )
-                            #     moves.append(['y',y])
-                            # else:
-                            #     if moves[-2][1] != x:
-                            #         #move_x(x)
-                            #         #print("move_x "+str(x))
-                            #         moves.append(['x',x])
-                            #         if moves[-2][1] != y:
-                            #             #move_y(y)
-                            #             #print("move_y "+str(y) )
-                            #             moves.append(['y',y])
-                            #     elif moves[-1][1] != y:
-                            #         #move_y(y)
-                            #         #print("move_y "+str(y) )
-                            #         moves.append(['y',y])
+                            same_y(storage,reversed_move_locations)
+                            cor = str_to_int_coor(reversed_move_locations[storage])
+                            y = cor[1]
+                            if y != moves[-2][1]:
+                                moves.append(['y',y])
+
+
+                        # for j in reversed(range(0, count-1)):
+
+
+                        #     number = str_to_int_coor(p_list_path_locations[j])
+                        #     x = number[0]
+                        #     y = number[1]
+
+                        #     #move_x(x)
+                        #     #print("move_x "+str(x))
+                        #     moves.append(['x',x])
+                        #     #move_y(y)
+                        #     #print("move_y "+str(y) )
+                        #     moves.append(['y',y])
 
                         #move to empty location off of board
                         #print("Off of the board")
@@ -628,32 +640,67 @@ def clean_up():
             x = num[0]
             y = num[1]
             if myList[colour_value[1]][colour_value[0]] == 1:
-                moves +=["z0","i1","z1","d1"] #black
+                moves +=["z0","i1","z1","d1",['x', x], ['y', y]] #black
             else:
-                moves +=["z0","i2","z1","d2"] #white
+                moves +=["z0","i2","z1","d2",['x', x], ['y', y]] #white
 
 
             #move back onto board
-            count2 = 0
+            #count2 = 0
             #selector_up()
-            for j in list_path_locations:
 
-                num = str_to_int_coor(j)
-                x = num[0]
-                y = num[1]
+            index_of_destionation = list_path_locations.index(reversed_locations_of_removed_pieces[count1])
+            short_list_path_locations = list_path_locations[:index_of_destionation+1]
 
-                #move_x(x)
-                #print("move_x "+str(x) )
-                moves.append(['x',x])
+            start = 0
+            same_y(start,short_list_path_locations)
+            cor = str_to_int_coor(short_list_path_locations[storage])
+            y = cor[1]
+            #move_y(y)
+            moves.append(['y',y])
+            #print("move_y "+str(y) )
+
+
+            same_x(storage,short_list_path_locations)
+            cor = str_to_int_coor(short_list_path_locations[storage])
+            x = cor[0]
+            #move_x(x)
+            moves.append(['x',x])
+            #print("move_x "+str(x) )
+
+            same_y(storage,short_list_path_locations)
+            cor = str_to_int_coor(short_list_path_locations[storage])
+            y = cor[1]
+            if y != moves[6][1]:
                 #move_y(y)
-                #print("move_y "+str(y))
                 moves.append(['y',y])
+                #print("move_y "+str(y) )
+
+            same_x(storage,short_list_path_locations)
+            cor = str_to_int_coor(short_list_path_locations[storage])
+            x = cor[0]
+            if x != moves[7][1]:
+                #move_x(x)
+                moves.append(['x',x])
+
+            # for j in list_path_locations:
+
+            #     num = str_to_int_coor(j)
+            #     x = num[0]
+            #     y = num[1]
+
+            #     #move_x(x)
+            #     #print("move_x "+str(x) )
+            #     moves.append(['x',x])
+            #     #move_y(y)
+            #     #print("move_y "+str(y))
+            #     moves.append(['y',y])
 
 
-                count2 = count2 + 1
-                if j == reversed_locations_of_removed_pieces[count1]:
-                    #moves.append("z0")
-                    break
+            #     count2 = count2 + 1
+            #     if j == reversed_locations_of_removed_pieces[count1]:
+            #         #moves.append("z0")
+            #         break
         else:
             num1 = str_to_int_coor(reversed_locations_to_move_back[count1])
             x1 = num1[0]
@@ -870,4 +917,4 @@ def show_moves(px,py,colour_in,a_or_r):
 
 
 
-#show_moves(5,9,2, "add")
+#show_moves(5,5,2, "add")
