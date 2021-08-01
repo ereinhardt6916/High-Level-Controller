@@ -245,6 +245,7 @@ class GameManager:
         
         while True:
             surrenderFlag = False
+            skipFlag = False
 
             # play our piece
             # wait for a new piece from local player
@@ -259,17 +260,18 @@ class GameManager:
                     self.__lcd.lcd_display_string("Your turn!      ", 1)
                     self.__lcd.lcd_display_string("Time: " + str(countdown-int(timeDiff))+"     ", 2)
                 else:
-                    # enter scenario 4, confirm surrender
-                    self.__lcd.lcd_display_string("Surrender?("+str(countdown-int(timeDiff))+")  ", 1)
+                    # enter scenario 4, surrender or skip turn
                     if self.__surrenderOptPosition == 1:
-                        self.__lcd.lcd_display_string(">No  Yes      ", 2)
+                        self.__lcd.lcd_display_string(">Skip Turn     ", 1)
+                        self.__lcd.lcd_display_string(" Surrender("+str(countdown-int(timeDiff))+")  ", 2)
                         if self.__buttonPushedFlag:
-                            # go back to scenario 3
-                            self.__lcdScenario = 3
+                            skipFlag = True
                             self.__buttonPushedFlag = False
-                            time.sleep(0.2)
+                            break
                     elif self.__surrenderOptPosition == 2:
-                        self.__lcd.lcd_display_string(" No >Yes      ", 2)
+                        self.__lcd.lcd_display_string(" Skip Turn     ", 1)
+                        self.__lcd.lcd_display_string(">Surrender("+str(countdown-int(timeDiff))+")  ", 2)
+                        
                         if self.__buttonPushedFlag:
                             surrenderFlag = True
                             self.__buttonPushedFlag = False
@@ -283,7 +285,14 @@ class GameManager:
             else:
                 surrenderFlag = True
 
-            if not surrenderFlag:
+            if surrenderFlag:
+                move = "!sur"
+            elif skipFlag:
+                move = "Skip"
+                # display wait for opponent's move message
+                self.__lcd.lcd_display_string("Wait for your   ", 1)
+                self.__lcd.lcd_display_string("opponent's move ", 2)
+            else:
                 # get the new piece coordinate
                 newCoordinate = self.__pl.getNewCoordinate()
                 logging.info("[main]new coordinate: " + str(newCoordinate))
@@ -299,8 +308,6 @@ class GameManager:
                 # display wait for opponent's move message
                 self.__lcd.lcd_display_string("Wait for your   ", 1)
                 self.__lcd.lcd_display_string("opponent's move ", 2)
-            else:
-                move = "!sur"
 
             #send Piece move
             result = self.__sendPiece(move)
