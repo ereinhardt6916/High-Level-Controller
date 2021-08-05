@@ -2,7 +2,7 @@ import time
 import logging
 import random
 import RPi.GPIO as GPIO
-from config import lcd, xy, pl, encoder, socket, gm
+from config import lcd, xy, pl, encoder, socket, gm, watchdog
 
 
 def valueChanged(value):
@@ -24,6 +24,9 @@ def main():
 
         # hardware init
         xy.selector_init()
+
+        # watchdog init
+        watchdog.start(lcd)
         
         # game manager init
         gm.setup(socket, xy, pl, encoder, lcd)
@@ -48,8 +51,8 @@ def main():
         # [ 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
         # demo_layout = [ \
-        # [ 1, 1, 1, 2, 2, 2, 1, 1, 1],\
-        # [ 1, 1, 1, 2, 2, 2, 1, 1, 1],\
+        # [ 1, 1, 2, 2, 2, 2, 2, 1, 1],\
+        # [ 1, 1, 2, 2, 2, 2, 2, 1, 1],\
         # [ 1, 1, 2, 2, 2, 2, 2, 1, 1],\
         # [ 1, 1, 2, 2, 2, 2, 2, 1, 1],\
         # [ 1, 1, 2, 2, 2, 2, 2, 1, 1],\
@@ -64,6 +67,7 @@ def main():
         logging.info(str(e))
 
     GPIO.cleanup()
+
 
 
 if __name__ == "__main__":

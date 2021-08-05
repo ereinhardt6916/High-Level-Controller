@@ -6,6 +6,7 @@ from piece_locator import Piece_locator
 from xy_selector import XY_selector
 from shelper import Shelper
 from gameManager import GameManager
+from watchdog_client import Watchdog_client
 
 # logging configuration
 format = "%(asctime)s: %(message)s"
@@ -36,3 +37,6 @@ socket = Shelper(HOST, PORT)
 
 # variables for game init
 gm = GameManager()
+
+# variables for watchdog 
+watchdog = Watchdog_client()
