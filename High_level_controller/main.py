@@ -26,7 +26,7 @@ def main():
         xy.selector_init()
 
         # watchdog init
-        watchdog.start(lcd)
+        # watchdog.start(lcd)
         
         # game manager init
         gm.setup(socket, xy, pl, encoder, lcd)

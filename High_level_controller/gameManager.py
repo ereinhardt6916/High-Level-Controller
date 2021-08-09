@@ -324,7 +324,8 @@ class GameManager:
             if result == "!" or result == "B" or result == "W":
                 if result == "!":
                     winner = self.__sendPiece("void")
-                    winner = self.__sendPiece("WINR")
+                    if len(winner) == 0:
+                        winner = self.__sendPiece("WINR")
                 else:
                     winner = result
                 self.__lcd.lcd_clear()
